@@ -10,6 +10,9 @@ class CreateLinks < ActiveRecord::Migration
       t.integer :fb_comment_count
       t.integer :fb_share_count
       t.string :username
+      t.string :actual_url
+      t.integer :klout_score
+      t.boolean :viewed, :default => false
       t.references :user
 
       t.timestamps

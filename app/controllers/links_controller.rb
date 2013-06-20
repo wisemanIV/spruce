@@ -2,7 +2,9 @@ class LinksController < ApplicationController
   # GET /links
   # GET /links.json
   def index
-    @links = Link.find(:all, :order => 'url')
+    @links = Link.find(:all, :order => 'fb_total_count DESC')
+    
+    @links_grid = initialize_grid(Link)
   
     respond_to do |format|
       format.html # index.html.erb

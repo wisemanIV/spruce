@@ -1,0 +1,38 @@
+<%- model_class = Link -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:acutal_url) %></th>
+      <th><%= model_class.human_attribute_name(:username) %></th>
+      <th><%= model_class.human_attribute_name(:klout_score) %></th>
+	  <th><%= model_class.human_attribute_name(:follower_count) %></th>
+	  <th><%= model_class.human_attribute_name(:fb_total_count) %></th>
+      <th><%= model_class.human_attribute_name(:viewed) %></th>
+      <th><%= model_class.human_attribute_name(:user_id) %></th>
+      <th><%= model_class.human_attribute_name(:status_id) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @links.each do |link| %>
+      <tr>
+        <td><%= link.actual_url %></td>
+		<td><%= link.username %></td>
+        <td><%= link.klout_score %></td>
+		<td><%= link.follower_count %></td>
+		<td><%= link.fb_total_count %></td>
+        <td><%= link.viewed %></td>
+        <td><%= link.user_id %></td>
+        <td><%= link.status_id %></td>
+        <td><%=l link.created_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_link_path,
+            :class => 'btn btn-primary' %>

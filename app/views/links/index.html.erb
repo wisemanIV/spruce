@@ -1,41 +1,36 @@
-<h1>Listing links</h1>
+<%- model_class = Link -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<%= grid(@links_grid, :show_filters => :no)  do |g|
 
-<table>
-  <tr>
-    <th>Url</th>
-    <th>Username</th>
-	<th>Followers</th>
-	<th>Favorited</th>
-	<th>Retweeted</th>
-	<th>FB Like count</th>
-	<th>FB Comment count</th>
-	<th>FB Share count</th>
-	<th>FB Total count</th>
-	<th>Created at</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+  g.column :name => 'URL', :attribute => 'actual_url' do |link|
+    link.actual_url
+  end
 
-<% @links.each do |link| %>
-  <tr>
-    <td><a href='<%= link.url %>'><%= link.url %></a></td>
-    <td><%= link.username %></td>
-	<td><%= link.follower_count %></td>
-	<td><%= link.favorite_count %></td>
-	<td><%= link.retweet_count %></td>
-	<td><%= link.fb_like_count %></td>
-	<td><%= link.fb_comment_count %></td>
-	<td><%= link.fb_share_count %></td>
-	<td><%= link.fb_total_count %></td>
-	<td><%= link.created_at %></td>
-    <td><%= link_to 'Show', link %></td>
-    <td><%= link_to 'Edit', edit_link_path(link) %></td>
-    <td><%= link_to 'Destroy', link, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
+  g.column :name => 'Screenname', :attribute => 'username' do |link|
+    link.username
+  end
 
-<br />
+  g.column :name => 'Followers', :attribute => 'follower_count'  do |link|
+    link.follower_count
+  end
+  
+  g.column :name => 'Klout', :attribute => 'klout_score'  do |link|
+    link.klout_score
+  end
+  
+  g.column :name => 'FB Count', :attribute => 'fb_total_count'  do |link|
+    link.fb_total_count
+  end
 
-<%= link_to 'New Link', new_link_path %>
+  g.column do |link|
+    link.viewed? ? 'Yes' : 'No'
+  end
+
+
+end -%>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_link_path,
+            :class => 'btn btn-primary' %>

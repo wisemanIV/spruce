@@ -11,5 +11,8 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery.ui.all
+//= require wice_grid
 //= require jquery_ujs
+//= require twitter/bootstrap
 //= require_tree .

@@ -17,6 +17,12 @@ gem "omniauth", "~> 1.1.4"
 
 gem 'omniauth-twitter'
 
+gem "wice_grid", '3.2.1'
+
+gem "therubyracer"
+gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem "twitter-bootstrap-rails"
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -30,6 +36,8 @@ group :assets do
 end
 
 gem 'jquery-rails'
+
+gem "jquery-ui-rails", "~> 4.0.3"
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'

@@ -23,9 +23,12 @@ ActiveRecord::Schema.define(:version => 20130618040822) do
     t.integer  "fb_comment_count"
     t.integer  "fb_share_count"
     t.string   "username"
+    t.string   "actual_url"
+    t.integer  "klout_score"
+    t.boolean  "viewed",                        :default => false
     t.integer  "user_id"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
     t.integer  "status_id",        :limit => 8
   end
 
