@@ -33,8 +33,13 @@ class Link < ActiveRecord::Base
            call = "https://api.facebook.com/method/fql.query?query=" + URI.escape(query) + "&format=json";
          
            body = JSON.parse(open(call).read)
-           puts url
-           actual_url = Net::HTTP.get_response(URI.parse(url))['location']
+           
+           while url != temp
+             temp = url 
+             url = Net::HTTP.get_response(URI.parse(url))['location']
+           end
+           
+           actual_url = url
            
            rescue EOFError
              puts "encountered EOFError"

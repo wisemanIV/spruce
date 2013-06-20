@@ -5,7 +5,7 @@
 <%= grid(@links_grid, :show_filters => :no)  do |g|
 
   g.column :name => 'URL', :attribute => 'actual_url' do |link|
-    link.actual_url
+    link_to(link.actual_url, link.actual_url)
   end
 
   g.column :name => 'Screenname', :attribute => 'username' do |link|
@@ -24,13 +24,8 @@
     link.fb_total_count
   end
 
-  g.column do |link|
+  g.column :name => 'Viewed', :attribute => 'viewed' do |link|
     link.viewed? ? 'Yes' : 'No'
   end
 
-
 end -%>
-
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_link_path,
-            :class => 'btn btn-primary' %>
