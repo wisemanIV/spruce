@@ -12,6 +12,7 @@ class CreateLinks < ActiveRecord::Migration
       t.string :username
       t.string :actual_url
       t.integer :klout_score
+      t.string :source
       t.boolean :viewed, :default => false
       t.references :user
 

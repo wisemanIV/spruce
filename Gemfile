@@ -19,6 +19,12 @@ gem 'omniauth-twitter'
 
 gem "wice_grid", '3.2.1'
 
+gem "delayed_job", "~> 3.0.5"
+
+gem 'delayed_job_active_record'
+
+gem 'daemons'
+
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem "twitter-bootstrap-rails"

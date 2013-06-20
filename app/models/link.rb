@@ -3,9 +3,10 @@ require 'open-uri'
 require 'json'
 
 class Link < ActiveRecord::Base
-  attr_accessible :url, :username, :follower_count, :status_id, :retweet_count, :favorite_count, :user_id, :fb_total_count, :fb_like_count, :fb_comment_count, :fb_share_count, :actual_url, :klout_score, :viewed
+  attr_accessible :url, :username, :follower_count, :status_id, :retweet_count, :favorite_count, :user_id, :fb_total_count, :fb_like_count, :fb_comment_count, :fb_share_count, :actual_url, :klout_score, :viewed, :source
   belongs_to :user
   validates :status_id, :uniqueness => true
+  
   
   def self.getTweets
     
@@ -33,13 +34,20 @@ class Link < ActiveRecord::Base
            call = "https://api.facebook.com/method/fql.query?query=" + URI.escape(query) + "&format=json";
          
            body = JSON.parse(open(call).read)
+           temp = ""
            
            while url != temp
-             temp = url 
-             url = Net::HTTP.get_response(URI.parse(url))['location']
+             temp = url
+             puts temp
+             resp = Net::HTTP.get_response(URI.parse(URI.encode(url)))
+             loc = resp['location']
+             
+             if !loc.nil? then
+               url = loc
+               actual_url = url
+               puts url
+             end
            end
-           
-           actual_url = url
            
            rescue EOFError
              puts "encountered EOFError"
@@ -50,14 +58,16 @@ class Link < ActiveRecord::Base
            end
            
              if !actual_url.blank? then
+               
+               source = get_host_without_www(actual_url)
            
-                 screenname = post["user"]["screen_name"]
+               screenname = post["user"]["screen_name"]
            
                  klout_score = getKlout(screenname)
           
-                 puts "#{url} #{actual_url} #{screenname} #{post["user"]["follower_count"]}  #{post["id"]} #{post["retweet_count"]} #{post["favorite_count"]} #{body[0]["total_count"]} #{body[0]["like_count"]} #{body[0]["comment_count"]} #{body[0]["share_count"]} #{klout_score}"
+                 puts "#{url} #{actual_url} #{source} #{screenname} #{post["user"]["follower_count"]}  #{post["id"]} #{post["retweet_count"]} #{post["favorite_count"]} #{body[0]["total_count"]} #{body[0]["like_count"]} #{body[0]["comment_count"]} #{body[0]["share_count"]} #{klout_score}"
       
-                 @link = Link.create(:url => url, :actual_url => actual_url, :username => post["user"]["screen_name"], :status_id => post["id"], :user_id => u.id, :follower_count => post["user"]["follower_count"], :retweet_count => post["retweet_count"], :favorite_count => post["favorite_count"], :fb_total_count => body[0]["total_count"].to_i, :fb_like_count => body[0]["like_count"].to_i, :fb_comment_count => body[0]["comment_count"].to_i, :fb_share_count => body[0]["share_count"].to_i, :klout_score => klout_score)
+                 @link = Link.create(:url => url, :actual_url => actual_url, :source => source, :username => post["user"]["screen_name"], :status_id => post["id"], :user_id => u.id, :follower_count => post["user"]["follower_count"], :retweet_count => post["retweet_count"], :favorite_count => post["favorite_count"], :fb_total_count => body[0]["total_count"].to_i, :fb_like_count => body[0]["like_count"].to_i, :fb_comment_count => body[0]["comment_count"].to_i, :fb_share_count => body[0]["share_count"].to_i, :klout_score => klout_score)
      
             end
           
@@ -65,9 +75,10 @@ class Link < ActiveRecord::Base
       end
       
     end
-    
   
   end
+  
+
   
   def self.getKlout (screenname)
     
@@ -83,6 +94,20 @@ class Link < ActiveRecord::Base
     
     score = body["score"]
   
+  end
+  
+  # URL always gets parsed twice
+  def self.get_host_without_www(url)
+    
+    begin 
+    puts url
+    host = URI.parse(url).host
+    source = host.sub(/^www\./, '')
+    
+  rescue Exception => e  
+    puts e.message  
+  end
+    
   end
       
   

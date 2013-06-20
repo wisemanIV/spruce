@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   has_many :links
   
   def self.from_omniauth(auth)
+    delay.up
+    
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
   end
 
@@ -17,4 +19,12 @@ class User < ActiveRecord::Base
     
   end
   
+  class << self
+  
+  def up
+    Link.getTweets
+  end
+  handle_asynchronously :up
+  
+end
 end
